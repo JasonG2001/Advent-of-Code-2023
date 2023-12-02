@@ -32,4 +32,19 @@ public class Day2 {
         }
         return lines;
     }
+
+    public static boolean isPossible(String colorsPerRound, int red, int green, int blue) {
+        String[] colorsCombo = colorsPerRound.split(",");
+        int count;
+        String color;
+        for (String colorCombo : colorsCombo) {
+            String[] countWithColor = colorCombo.strip().split(" ");
+            count = Integer.parseInt(countWithColor[0]);
+            color = countWithColor[1];
+            if ((color == "red" && red < count) || (color == "green" && green < count) || (color == "blue" && blue < count)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
