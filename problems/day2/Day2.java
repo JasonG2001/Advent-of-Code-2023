@@ -9,7 +9,9 @@ import java.util.Scanner;
 public class Day2 {
     
     public static void main(String[] args) {
-        readFileIn("day2_input.txt");
+        Map<Integer, String> games = readFileIn("day2_input.txt");
+        int sumAllIds = sumIds(games, 12, 13, 14);
+        System.out.println(sumAllIds); // Part 1: 2162
     }
 
     public static Map<Integer, String> readFileIn(String fileName) {
@@ -22,8 +24,6 @@ public class Day2 {
                 String[] data = reader.nextLine().split(":");
                 int gameNumber = Integer.parseInt(data[0].split(" ")[1]);
                 lines.put(gameNumber, data[1].strip());
-                System.out.println(gameNumber);
-                System.out.println(data[1].strip());
             }
             reader.close();
         } catch(FileNotFoundException e) {
@@ -31,6 +31,31 @@ public class Day2 {
             e.printStackTrace();
         }
         return lines;
+    }
+
+    public static int sumIds(Map<Integer, String> games, int red, int green, int blue) {
+        int summ = 0;
+        String colorsPerGame;
+        int gameID;
+        String allRounds;
+        for (Map.Entry<Integer, String> game : games.entrySet()) {
+            gameID = game.getKey();
+            allRounds = game.getValue();
+            if (isAllRoundsPossible(allRounds, red, green, blue)) {
+                summ += gameID;
+            }
+        }
+        return summ;
+    }
+
+    public static boolean isAllRoundsPossible(String allRounds, int red, int green, int blue) {
+        String[] allRoundsArr = allRounds.split(";");
+        for (String round : allRoundsArr) {
+            if (!isPossible(round.strip(), red, green, blue)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isPossible(String colorsPerRound, int red, int green, int blue) {
@@ -41,7 +66,7 @@ public class Day2 {
             String[] countWithColor = colorCombo.strip().split(" ");
             count = Integer.parseInt(countWithColor[0]);
             color = countWithColor[1];
-            if ((color == "red" && red < count) || (color == "green" && green < count) || (color == "blue" && blue < count)) {
+            if ((color.equals("red") && red < count) || (color.equals("green") && green < count) || (color.equals("blue") && blue < count)) {
                 return false;
             }
         }
