@@ -11,7 +11,7 @@ public class Day3 {
         int summ = sumPartNumbers(file);
         System.out.println(summ); // Part 1: 550064
         int sumOfRatios = sumAllGearRatios(file);
-        System.out.println(sumOfRatios);
+        System.out.println(sumOfRatios); // Part 2: 85010461
     }
 
     public static List<String> readFile(String fileName) {
