@@ -10,6 +10,8 @@ public class Day3 {
         List<String> file = readFile("day3_input.txt");
         int summ = sumPartNumbers(file);
         System.out.println(summ); // Part 1: 550064
+        int sumOfRatios = sumAllGearRatios(file);
+        System.out.println(sumOfRatios);
     }
 
     public static List<String> readFile(String fileName) {
@@ -71,6 +73,68 @@ public class Day3 {
             }
         }
         return false;
+    }
+
+    public static int sumAllGearRatios(List<String> lines) {
+        int res = 0;
+        for (int rowNum = 0; rowNum < lines.size(); rowNum++) {
+            for (int colNum = 0; colNum < lines.get(0).length(); colNum++) {
+                if (lines.get(rowNum).charAt(colNum) == '*') {
+                    res += getGearRatio(rowNum, colNum, lines);
+                }
+            }
+        }
+        return res;
+    }
+
+    public static int getGearRatio(int rowNum, int colNum, List<String> lines) {
+        int rowStart = rowNum - 1, rowEnd = rowNum + 1, colStart = colNum - 1, colEnd = colNum + 1;
+        List<Integer> gears = new ArrayList<>();
+        for (int row = rowStart; row <= rowEnd; row++) {
+            boolean prevIsNum = false;
+            for (int col = colStart; col <= colEnd; col++) {
+                if (row >= 0 && row < lines.size() && col >= 0 && col < lines.get(0).length()) {
+                    char curChar = lines.get(row).charAt(col);
+                    if (Character.isDigit(curChar)) {
+                        if (!prevIsNum) {
+                            int num = getNum(col, lines.get(row));
+                            gears.add(num);
+                        }
+                        prevIsNum = true;
+                    } else {
+                        prevIsNum = false;
+                    }
+                }
+            }
+        }
+        if (gears.size() == 2) {
+            return gears.get(0) * gears.get(1);
+        }
+        return 0;
+    }
+
+    public static int getNum(int colNum, String line) {
+        String num = String.valueOf((line.charAt(colNum)));
+        int p1 = colNum - 1, p2 = colNum + 1;
+        while(Character.isDigit(line.charAt(p1))) {
+            if (Character.isDigit(line.charAt(p1))) {
+                num = String.valueOf(line.charAt(p1)) + num;
+                if (p1 == 0) {
+                    break;
+                }
+                p1--;
+            }
+        }
+        while(Character.isDigit(line.charAt(p2))) {
+            if (Character.isDigit(line.charAt(p2))) {
+                num += String.valueOf(line.charAt(p2));
+                if (p2 == line.length() - 1) {
+                    break;
+                }
+                p2++;
+            }
+        }
+        return Integer.parseInt(num);
     }
 }
 
