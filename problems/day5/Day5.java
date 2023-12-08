@@ -8,19 +8,23 @@ import java.util.Scanner;
 
 
 public class Day5 {
+    private static Map<String, Map<Long[], Long>> map = readFile("day5_input.txt");
+    private static List<Long> seeds = getSeeds("day5_input.txt");        
+    private static String[] mappingOrder = {"seed-to-soil", "soil-to-fertilizer", "fertilizer-to-water", "water-to-light", "light-to-temperature", "temperature-to-humidity", "humidity-to-location"};
+    private static long minLocation = getLowestLocation(seeds, map);
 
     public static void main(String[] args) {
-        System.out.println(readFile("day5_input.txt"));
+        System.out.println(minLocation); // Part 1: 88151870
     }
 
-    public static Map<String, Map<Long[], Long[]>> readFile(String fileName) {
-        Map<String, Map<Long[], Long[]>> allMaps = new HashMap<>();
+    public static Map<String, Map<Long[], Long>> readFile(String fileName) {
+        Map<String, Map<Long[], Long>> allMaps = new HashMap<>();
         try {
             Scanner reader = new Scanner(new File(fileName));
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
                 if (data.contains("map")) {
-                    Map<Long[], Long[]> curMap = new HashMap<>();
+                    Map<Long[], Long> curMap = new HashMap<>();
                     String mapName = data.split(" ")[0];
                     data = reader.nextLine();
                     while (data != "") {
@@ -42,13 +46,13 @@ public class Day5 {
         return allMaps;
     }
 
-    public static Map<Long[], Long[]> convertToMap(Map<Long[], Long[]> map, String data) {
+    public static Map<Long[], Long> convertToMap(Map<Long[], Long> map, String data) {
         String[] sepData = data.split(" ");
         int FIRST = 0, SECOND = 1, THIRD = 2;
         long destination = Long.parseLong(sepData[FIRST]);
         long start = Long.parseLong(sepData[SECOND]);
         long range = Long.parseLong(sepData[THIRD]);
-        map.put(new Long[]{start, start + range - 1}, new Long[]{destination + range - 1});
+        map.put(new Long[]{start, start + range - 1}, destination);
         return map;
     }
 
@@ -66,5 +70,34 @@ public class Day5 {
             e.printStackTrace();
         }
         return seeds;
+    }
+
+    public static long getLowestLocation(List<Long> seeds, Map<String, Map<Long[], Long>> map) {
+        long minLocation = Long.MAX_VALUE;
+        for (Long seed : seeds) {    
+            minLocation = Math.min(getLocation(seed, map), minLocation);
+        }
+        return minLocation;
+    }
+
+    public static long getLocation(Long seed, Map<String, Map<Long[], Long>> map) {
+        for (String converter : mappingOrder) {
+            Map<Long[], Long> value = map.get(converter);
+            seed = convert(value, seed);
+        }
+        return seed;
+    }
+
+    public static long convert(Map<Long[], Long> map, long key) {
+        Long[] startRange;
+        Long end;
+        for (Map.Entry<Long[], Long> entry : map.entrySet()) {
+            startRange = entry.getKey();
+            end = entry.getValue();
+            if (key >= startRange[0] && key <= startRange[1]) {
+                return key - startRange[0] + end;
+            }
+        }
+        return key;
     }
 }
