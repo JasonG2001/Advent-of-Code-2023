@@ -51,4 +51,20 @@ public class Day5 {
         map.put(new Long[]{start, start + range - 1}, new Long[]{destination + range - 1});
         return map;
     }
+
+    public static List<Long> getSeeds(String fileName) {
+        List<Long> seeds = new ArrayList<>();
+        try {
+            Scanner reader = new Scanner(new File(fileName));
+            String[] seedsStr = reader.nextLine().split(":")[1].strip().split(" ");
+            for (String seed : seedsStr) {
+                seeds.add(Long.parseLong(seed));
+            }
+            reader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            e.printStackTrace();
+        }
+        return seeds;
+    }
 }
