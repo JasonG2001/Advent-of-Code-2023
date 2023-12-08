@@ -12,9 +12,11 @@ public class Day5 {
     private static List<Long> seeds = getSeeds("day5_input.txt");        
     private static String[] mappingOrder = {"seed-to-soil", "soil-to-fertilizer", "fertilizer-to-water", "water-to-light", "light-to-temperature", "temperature-to-humidity", "humidity-to-location"};
     private static long minLocation = getLowestLocation(seeds, map);
+    private static long minLocationRange = getLowestLocationWithRange(seeds, map);
 
     public static void main(String[] args) {
         System.out.println(minLocation); // Part 1: 88151870
+        System.out.println(minLocationRange);                                      
     }
 
     public static Map<String, Map<Long[], Long>> readFile(String fileName) {
@@ -70,6 +72,18 @@ public class Day5 {
             e.printStackTrace();
         }
         return seeds;
+    }
+
+    public static long getLowestLocationWithRange(List<Long> seeds, Map<String, Map<Long[], Long>> map) {
+        long seed, range, minLocation = Long.MAX_VALUE;
+        for (int i = 0; i < seeds.size(); i += 2) {
+            seed = seeds.get(i);
+            range = seeds.get(i + 1);
+            for (long j = seed; j < seed + range; j++) {
+                minLocation = Math.min(getLocation(j, map), minLocation);
+            }
+        }
+        return minLocation;
     }
 
     public static long getLowestLocation(List<Long> seeds, Map<String, Map<Long[], Long>> map) {
