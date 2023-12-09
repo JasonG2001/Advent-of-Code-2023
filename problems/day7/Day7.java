@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Day7 {
 
-    private static Queue<String> q = new PriorityQueue<>();
+    private static Queue<String> q = new PriorityQueue<>(new HandComparator());
     private static Map<String, Integer> bids = new HashMap<>();
 
     public static void main(String[] args) {
@@ -17,7 +17,6 @@ public class Day7 {
     }
     
     public static void populateStructures(String fileName) {
-        Queue<String> q = new PriorityQueue<>();
         try {
             Scanner reader = new Scanner(new File(fileName));
             while (reader.hasNextLine()) {
@@ -33,6 +32,4 @@ public class Day7 {
             e.printStackTrace();
         }
     }
-
-
 }
