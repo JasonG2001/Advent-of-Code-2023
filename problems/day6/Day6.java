@@ -9,9 +9,11 @@ import java.util.Scanner;
 public class Day6 {
     private static List<List<String>> timesAndDistances = readFile("day6_input.txt");
     private static int allWaysToBeatRecord = getWaysToBeatRecord(timesAndDistances);
+    private static long waysToBeatTotalRecord = getWaysToBeatTotalRecord(timesAndDistances);
 
     public static void main(String[] args) {
         System.out.println(allWaysToBeatRecord); // Part 1: 170000
+        System.out.println(waysToBeatTotalRecord); // Part 2: 20537782
     }
 
     public static List<List<String>> readFile(String fileName) {
@@ -30,6 +32,15 @@ public class Day6 {
         return res;
     }
 
+    public static long getWaysToBeatTotalRecord(List<List<String>> timesAndDistances) {
+        String time = "", distance = "";
+        for (int i = 0; i < timesAndDistances.get(0).size(); i++) {
+            time += timesAndDistances.get(0).get(i);
+            distance += timesAndDistances.get(1).get(i);
+        }
+        return getWaysToBeatCertainRecord(Long.parseLong(time), Long.parseLong(distance));
+    }
+
     public static int getWaysToBeatRecord(List<List<String>> timesAndDistances) {
         int waysToBeat = 1;
         List<String> times = timesAndDistances.get(0);
@@ -37,12 +48,12 @@ public class Day6 {
         for (int i = 0; i < times.size(); i++) {
             waysToBeat *= getWaysToBeatCertainRecord(Integer.parseInt(times.get(i)), Integer.parseInt(distances.get(i)));
         }
-        return waysToBeat;
+        return (int) waysToBeat;
     }
 
-    public static int getWaysToBeatCertainRecord(int time, int distance) {
-        int p1 = 0, p2 = time, mid;
-        int ways = 1;
+    public static long getWaysToBeatCertainRecord(long time, long distance) {
+        long p1 = 0, p2 = time, mid;
+        long ways = 1;
 
         while (p1 <= p2) {
             mid = p1 + (p2 - p1) / 2;
@@ -67,7 +78,7 @@ public class Day6 {
         return ways;
     }
 
-    public static int calculateDistance(int timeHeld, int timeTotal) {
+    public static long calculateDistance(long timeHeld, long timeTotal) {
         return timeHeld * (timeTotal - timeHeld);
     } 
 }
