@@ -14,11 +14,12 @@ public class Day7 {
 
     public static void main(String[] args) {
         populateStructures("day7_input.txt");
+        long totalWinnings = getTotalWinnings();
+        System.out.println(totalWinnings); // Part 1: 241344943
     }
     
     public static void populateStructures(String fileName) {
-        try {
-            Scanner reader = new Scanner(new File(fileName));
+        try (Scanner reader = new Scanner(new File(fileName))) {
             while (reader.hasNextLine()) {
                 String[] line = reader.nextLine().split(" ");
                 String hand = line[0];
@@ -26,10 +27,20 @@ public class Day7 {
                 q.add(hand);
                 bids.put(hand, Integer.parseInt(bid));
             }
-            reader.close();
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             e.printStackTrace();
         }
+    }
+
+    public static long getTotalWinnings() {
+        long totalWinnings = 0;
+        int totalHands = bids.size();
+        while (!q.isEmpty()) {
+            String hand = q.poll();
+            totalWinnings += totalHands * bids.get(hand);
+            totalHands--;
+        }
+        return totalWinnings;
     }
 }
