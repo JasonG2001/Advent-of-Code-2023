@@ -55,11 +55,7 @@ public class HandComparator implements Comparator<String> {
 
     public boolean isFullHouse(String hand) {
         Map<Character, Integer> counter = count(hand);
-        if (counter.size() == 2) {
-            return true;
-        } else {
-            return (counter.containsKey('J') && counter.size() == 3);
-        }
+        return counter.size() == 2 || (counter.containsKey('J') && counter.size() == 3);
     }
 
     public boolean isThree(String hand) {
