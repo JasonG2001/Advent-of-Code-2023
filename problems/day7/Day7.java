@@ -15,7 +15,8 @@ public class Day7 {
     public static void main(String[] args) {
         populateStructures("day7_input.txt");
         long totalWinnings = getTotalWinnings();
-        System.out.println(totalWinnings); // Part 1: 241344943
+        System.out.println(totalWinnings); // Part 1: 241344943 
+                                           // Part 2: 243101568
     }
     
     public static void populateStructures(String fileName) {

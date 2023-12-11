@@ -10,8 +10,8 @@ public class HandComparator implements Comparator<String> {
             put('A', 14);
             put('K', 13);
             put('Q', 12);
-            put('J', 11);
             put('T', 10);
+            put('J', 1);
         }};
         return value;
     }
@@ -31,40 +31,55 @@ public class HandComparator implements Comparator<String> {
 
     public boolean isFive(String hand) {
         Map<Character, Integer> counter = count(hand);
-        return counter.size() == 1;
+        return counter.size() == 1 || (counter.containsKey('J') && counter.size() == 2);
     }
 
     public boolean isFour(String hand) {
         Map<Character, Integer> counter = count(hand);
-        return counter.size() == 2 && (counter.get(hand.charAt(0)) == 1 || counter.get(hand.charAt(0)) == 4);
-    }
-
-    public boolean isFullHouse(String hand) {
-        Map<Character, Integer> counter = count(hand);
-        return counter.size() == 2;
-    }
-
-    public boolean isThree(String hand) {
-        Map<Character, Integer> counter = count(hand);
-        if (counter.size() != 3) {
-            return false;
-        } 
-        for (Map.Entry<Character, Integer> entry : counter.entrySet()) {
-            if (entry.getValue() == 3) {
+        if (counter.size() == 2 && (counter.get(hand.charAt(0)) == 1 || counter.get(hand.charAt(0)) == 4)) {
+            return true;
+        } else if (counter.containsKey('J') && counter.size() == 3) {
+            if (counter.get('J') > 1) {
                 return true;
+            } else {
+                for (Map.Entry<Character, Integer> entry : counter.entrySet()) {
+                    if (entry.getValue() == 3) {
+                        return true;
+                    }
+                }
+                return false;
             }
         }
         return false;
     }
 
+    public boolean isFullHouse(String hand) {
+        Map<Character, Integer> counter = count(hand);
+        if (counter.size() == 2) {
+            return true;
+        } else {
+            return (counter.containsKey('J') && counter.size() == 3);
+        }
+    }
+
+    public boolean isThree(String hand) {
+        Map<Character, Integer> counter = count(hand);
+        for (Map.Entry<Character, Integer> entry : counter.entrySet()) {
+            if (entry.getValue() == 3) {
+                return true;
+            }
+        }
+        return (counter.size() == 4 && counter.containsKey('J'));
+    }
+
     public boolean isTwoPair(String hand) {
         Map<Character, Integer> counter = count(hand);
-        return counter.size() == 3;
+        return counter.size() == 3 || (counter.size() == 4 && counter.containsKey('J'));
     }
 
     public boolean isPair(String hand) {
         Map<Character, Integer> counter = count(hand);
-        return counter.size() == 4;
+        return counter.size() == 4 || (counter.size() == 5 && counter.containsKey('J'));
     }
 
     public int getHandPoints(String hand) {
