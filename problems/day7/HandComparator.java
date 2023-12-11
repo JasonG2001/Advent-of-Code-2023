@@ -96,7 +96,7 @@ public class HandComparator implements Comparator<String> {
                 return 1;
             }
         }
-        return 1;
+        return 0;
     }
 
     public int getValue(char card) {
@@ -107,7 +107,8 @@ public class HandComparator implements Comparator<String> {
             return map.get(card);
         }
     }
-
+    
+    @Override
     public int compare(String hand1, String hand2) {
         if (getHandPoints(hand2) > getHandPoints(hand1)) {
             return 1;
