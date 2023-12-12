@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -8,15 +10,19 @@ import java.util.Scanner;
 public class Day8 {
 
     private static Map<String, String[]> map = new HashMap<>();
+    private static String instructions = "";
+    private static List<String> startingPositions = new ArrayList<>();
 
     public static void main(String[] args) {
-        String instructions = getInstructions("day8_input.txt");
-        int steps = countSteps("AAA", "ZZZ", instructions);
+        getInstructions("day8_input.txt");
+        int steps = countSteps("AAA", "ZZZ");
         System.out.println(steps); // Part 1: 21797
+        populateStartingPositions('A');
+        long stepsForAllPositions = countStepsForAllPositions('Z');
+        System.out.println(stepsForAllPositions);
     }
 
-    private static String getInstructions(String fileName) {
-        String instructions = "";
+    private static void getInstructions(String fileName) {
         try(Scanner reader = new Scanner(new File(fileName))) {
             while (reader.hasNextLine()) {
                 String data = reader.nextLine();
@@ -30,7 +36,6 @@ public class Day8 {
             System.out.println("File not found");
             fnfe.printStackTrace();
         }
-        return instructions;
     }
 
     private static void addToMap(String data) {
@@ -40,7 +45,7 @@ public class Day8 {
         map.put(key, value);
     }
 
-    private static int countSteps(String start, String end, String instructions) {
+    private static int countSteps(String start, String end) {
         int position = 0;
         int steps = 0;
         while (!start.equals(end)) {
@@ -54,5 +59,16 @@ public class Day8 {
             steps++;
         }
         return steps;
+    }
+
+    private static int countStepsToReachFinalChar(char startchar, char endChar)
+
+    private static void populateStartingPositions(char startChar) {
+        for (Map.Entry<String, String[]> entry : map.entrySet()) {
+            String key = entry.getKey();
+            if (key.charAt(key.length() - 1) == startChar) {
+                startingPositions.add(key);
+            }
+        }
     }
 }
