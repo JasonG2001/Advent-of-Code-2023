@@ -17,7 +17,7 @@ public class Day10 {
     private static int furthestDistance = getFurthestDistance(startingCoords, fileLines);
 
     public static void main(String[] args) {
-        System.out.println(furthestDistance);
+        System.out.println(furthestDistance); // Part 1: 6907
     }
 
     private static List<String> readFile(String fileName) {
@@ -50,9 +50,9 @@ public class Day10 {
 
     private static int getFurthestDistance(List<Integer> startingCoordinates, List<String> fileLines) {
         Queue<List<Integer>> q = new LinkedList<>();
-        q.add(startingCoordinates);
-        int furthestDistance = 0;
         Set<List<Integer>> visited = new HashSet<>();
+        int furthestDistance = 0;
+        q.add(startingCoordinates);
 
         while (!q.isEmpty()) {
             List<Integer> curPosition = q.poll();
@@ -72,7 +72,7 @@ public class Day10 {
 
             }
         }
-        return furthestDistance;
+        return furthestDistance - 1;
     }
 
     private static List<List<Integer>> getNextPositions(List<Integer> coords, List<String> fileLines) {
