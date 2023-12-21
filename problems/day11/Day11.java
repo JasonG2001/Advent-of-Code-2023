@@ -14,9 +14,13 @@ public class Day11 {
         List<Integer> emptyRows = getEmptyRows(fileLines);
         List<Integer> emptyCols = getEmptyCol(fileLines);
 
-        List<List<Integer>> alteredCoords = alterAllCoords(allHashTagCoords, emptyRows, emptyCols, 1);
-        int sumOfDistancesP1 = getSumOfAllDistances(alteredCoords);
+        List<List<Long>> alteredCoordsP1 = alterAllCoords(allHashTagCoords, emptyRows, emptyCols, 1);
+        long sumOfDistancesP1 = getSumOfAllDistances(alteredCoordsP1);
         System.out.println(sumOfDistancesP1); // Part 1: 10422930
+        
+        List<List<Long>> alteredCoordsP2 = alterAllCoords(allHashTagCoords, emptyRows, emptyCols, 999999);
+        long sumOfDistancesP2 = getSumOfAllDistances(alteredCoordsP2);
+        System.out.println(sumOfDistancesP2); // Part 2: 699909023130
     }
 
     public static List<String> readFile(String fileName) {
@@ -45,17 +49,18 @@ public class Day11 {
         return allCoords;
     }
 
-    public static List<List<Integer>> alterAllCoords(List<List<Integer>> originalCoords, List<Integer> rowNumbers, List<Integer> colNumbers, int additionalSpace) {
+    public static List<List<Long>> alterAllCoords(List<List<Integer>> originalCoords, List<Integer> rowNumbers, List<Integer> colNumbers, int additionalSpace) {
+        List<List<Long>> alteredCoords = new ArrayList<>();
         for (int i = 0; i < originalCoords.size(); i++) {
-            List<Integer> alteredCoord = alterCoords(originalCoords.get(i), rowNumbers, colNumbers, additionalSpace);
-            originalCoords.set(i, alteredCoord);
+            List<Long> alteredCoord = alterCoords(originalCoords.get(i), rowNumbers, colNumbers, additionalSpace);
+            alteredCoords.add(alteredCoord);
         }
-        return originalCoords;
+        return alteredCoords;
     }
 
-    public static List<Integer> alterCoords(List<Integer> originalCoord, List<Integer> rowNumbers, List<Integer> colNumbers, int additionalSpace) {
+    public static List<Long> alterCoords(List<Integer> originalCoord, List<Integer> rowNumbers, List<Integer> colNumbers, int additionalSpace) {
         final int X = 0, Y = 1;
-        int x = originalCoord.get(X), y = originalCoord.get(Y);
+        long x = originalCoord.get(X), y = originalCoord.get(Y);
         for (int rowNumber : rowNumbers) {
             if (rowNumber < originalCoord.get(X)) {
                 x += additionalSpace;
@@ -104,8 +109,8 @@ public class Day11 {
     }
 
 
-    public static int getSumOfAllDistances(List<List<Integer>> hashTagCoordinates) {
-        int summ = 0;
+    public static long getSumOfAllDistances(List<List<Long>> hashTagCoordinates) {
+        long summ = 0;
         for (int i = 0; i < hashTagCoordinates.size(); i++) {
             for (int j = i + 1; j < hashTagCoordinates.size(); j++) {
                 summ += getDistance(hashTagCoordinates.get(i), hashTagCoordinates.get(j));
@@ -114,7 +119,7 @@ public class Day11 {
         return summ;
     } 
 
-    public static int getDistance(List<Integer> coord1, List<Integer> coord2) {
+    public static long getDistance(List<Long> coord1, List<Long> coord2) {
         final int X = 0, Y = 1;
         return Math.abs(coord2.get(Y) - coord1.get(Y)) + Math.abs(coord2.get(X) - coord1.get(X));
     }
