@@ -12,7 +12,7 @@ public class Day12 {
         int totalSum = sumAllCombinations(fileLines);
         System.out.println(totalSum);
 
-        int c = getCombinationsCount("#.?.#", Arrays.asList(1));
+        int c = getCombinationsCount("?#????..#??????#????", Arrays.asList(2, 2, 1, 9));
         System.out.println(c);
     }
 
@@ -51,31 +51,50 @@ public class Day12 {
 
     public static int getCombinationsCount(String springs, List<Integer> counts) {
 
+        int curCount = counts.get(0);
+        String curSequence;
         if (counts.size() == 1) {
-            if (springs.length() < counts.get(0)) {
+            if (curCount == springs.length()) {
+                curSequence = springs;
+            } else if (curCount < springs.length()) {
+                curSequence = springs.substring(0, curCount);
+            } else {
                 return 0;
-            } else if (springs.substring(0, counts.get(0)).contains(".")) {
+            }
+        } else {
+            if (curCount >= springs.length()) {
+                return 0;
+            } else {
+                curSequence = springs.substring(0, curCount);
+            }
+        }
+        
+        if (counts.size() == 1) {
+            if (curCount > springs.length() || (springs.charAt(0) == '#' 
+                        && springs.substring(curCount).contains("#"))) {
+                return 0;
+            } else if (curSequence.contains(".") 
+                    || (springs.substring(curCount).contains("#") && 
+                        springs.charAt(0) != '#')) {
                 return getCombinationsCount(springs.substring(1), counts);
-            } else if (springs.charAt(0) == '#') { 
-                return springs.substring(counts.get(0)).contains("#") ? 
-                    0 : 1;
-            } else if (springs.substring(0, counts.get(0)).contains("#")) {
-                return springs.substring(counts.get(0)).contains("#") ? 
-                    getCombinationsCount(springs.substring(1), counts) : 
-                    1 + getCombinationsCount(springs.substring(1), counts);
-            // all ?
-            } else if (springs.substring(counts.get(0)).contains("#")) {
-                return getCombinationsCount(springs.substring(1), counts);
+            } else if (springs.charAt(0) == '#' 
+                    && !springs.substring(curCount).contains("#")) {
+                return 1;
             } else {
                 return 1 + getCombinationsCount(springs.substring(1), counts);
             }
-        } else if (springs.length() <= counts.get(0)) {
+        } else if (curCount >= springs.length() - 1) {
             return 0;
-        } else if (springs.substring(0, counts.get(0)).contains(".") || springs.charAt(counts.get(0)) == '#') {
-            return getCombinationsCount(springs.substring(1), counts);
+        } else if (springs.charAt(0) == '#') {
+            return springs.charAt(curCount) == '#' ? 0 
+                : curSequence.contains(".") ? 0 
+                : getCombinationsCount(springs.substring(curCount + 1), counts.subList(1, counts.size()));
+        } else if (!curSequence.contains(".") 
+                && springs.charAt(curCount) != '#') {
+            return getCombinationsCount(springs.substring(1), counts) 
+                + getCombinationsCount(springs.substring(curCount + 1), counts.subList(1, counts.size()));
         } else {
-            return getCombinationsCount(springs.substring(counts.get(0) + 1), counts.subList(1, counts.size())) + 
-                getCombinationsCount(springs.substring(1), counts);
+            return getCombinationsCount(springs.substring(1), counts);
         }
     }
 }
