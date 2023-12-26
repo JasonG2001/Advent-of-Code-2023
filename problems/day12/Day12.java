@@ -74,11 +74,9 @@ public class Day12 {
                         && springs.substring(curCount).contains("#"))) {
                 return 0;
             } else if (curSequence.contains(".") 
-                    || (springs.substring(curCount).contains("#") && 
-                        springs.charAt(0) != '#')) {
+                    || springs.substring(curCount).contains("#")) {
                 return getCombinationsCount(springs.substring(1), counts);
-            } else if (springs.charAt(0) == '#' 
-                    && !springs.substring(curCount).contains("#")) {
+            } else if (springs.charAt(0) == '#') {
                 return 1;
             } else {
                 return 1 + getCombinationsCount(springs.substring(1), counts);
